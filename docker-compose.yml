@@ -1,0 +1,72 @@
+services:
+     gateway:
+       image: gateway
+       ports:
+         - 8765:8765
+       environment:
+         - "SPRING_PROFILES_ACTIVE=zone1"
+     eurekaserver1:
+       image: eurekaserver1
+       ports:
+         - 8761
+       environment:
+         - "SPRING_PROFILES_ACTIVE=peer1"
+     eurekaserver2:
+       image: eurekaserver1
+       ports:
+         - 8762
+       environment:
+         - "SPRING_PROFILES_ACTIVE=peer2"
+     rate1:
+       image: rate
+       ports:
+         - 9000
+       environment:
+         - "SPRING_PROFILES_ACTIVE=zone1"
+     rate2:
+       image: rate
+       ports:
+         - 9001
+       environment:
+         - "SPRING_PROFILES_ACTIVE=zone2"
+     calculator:
+       image: caloriecalcolator
+       ports:
+         - 8083
+       environment:
+         - "SPRING_PROFILES_ACTIVE=zone1"
+     bodyshape:
+       image: bodyshape
+       ports:
+         - 8084
+     photoprocessing:
+       image: photoprocessing
+       ports:
+         - 8086
+     photodb:
+       image: mysql
+       command: --default-authentication-plugin=mysql_native_password
+       ports:
+         - 3333
+       restart: always
+       environment:
+         MYSQL_ROOT_PASSWORD: root
+     rabbitmq:
+       image: rabbitmq:3-management-alpine
+       container_name: 'rabbitmq'
+       ports:
+         - 5672:5672
+         - 15672:15672
+       volumes:
+         - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+         - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+       networks:
+         - rabbitmq_go_net
+
+networks:
+    rabbitmq_go_net:
+      driver: bridge
+
+
+
+

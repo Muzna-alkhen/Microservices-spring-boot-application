@@ -1,0 +1,32 @@
+spring:
+    application:
+        name: eureka-server-service
+    zipkin :
+        baseUrl: http://zipkin-server/
+---
+spring:
+    profiles: peer1
+eureka:
+    instance:
+        hostname: peer1.com
+        metadataMap:
+            zone: zone1
+    client:
+        serverUrl:
+            defaultZone: http://localhost:8762/eureka/
+server:
+    port: 8761
+---
+spring:
+    profiles: peer2
+eureka:
+    instance:
+        hostname: peer2.com
+        metadataMap:
+            zone: zone2
+    client:
+        serverUrl:
+            defaultZone: http://localhost:8761/eureka/
+server:
+    port: 8762
+

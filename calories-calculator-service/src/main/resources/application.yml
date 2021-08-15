@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: SumCalories
+zipkin :
+  baseUrl: http://zipkin-server/
+---
+spring:
+  profiles: zone2
+eureka:
+  instance:
+    metadataMap:
+      zone: zone2
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8762/eureka/
+
+---
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/calories-calculator?userSSL=false
+---
+spring:
+  datasource:
+    username: root
+    password:
+---
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+---
+spring:
+  jpa:
+    hibernate:
+        ddl-auto: update
+server:
+  port: 8083
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'hystrix.stream'
+
+hystrix:
+  dashboard:
+    proxy-stream-allow-list:
+      - '*'
+
+
